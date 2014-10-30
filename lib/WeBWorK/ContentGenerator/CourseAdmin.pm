@@ -923,6 +923,8 @@ sub rename_course_form {
 	
 	my @courseIDs = listCourses($ce);
 	@courseIDs    = sort {lc($a) cmp lc ($b) } @courseIDs;
+
+	@courseIDs = grep {$_ ne "admin"} @courseIDs;
 	
 	my %courseLabels; # records... heh.
 	foreach my $courseID (@courseIDs) {
