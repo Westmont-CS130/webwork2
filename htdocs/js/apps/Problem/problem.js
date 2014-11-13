@@ -1,7 +1,14 @@
+window.submitted = false;
+
 $(function() {    
 $(window).load(function() { $('#achievementModal').modal('show');
 			    setTimeout(function(){$('#achievementModal').modal('hide');},5000);
 			  });
+
+$("#submitAnswers_id").click(function(){
+	window.submitted = true;
+});
+
 })
 
 window.onbeforeunload = function(e) {
@@ -12,8 +19,8 @@ window.onbeforeunload = function(e) {
 		}
 	});
 
-	if (window.unsubmittedAnswers == true){
-		return "Stop";
+	if (window.unsubmittedAnswers == true && window.submitted == false){
+		return "You have unsubmitted answers, are you sure you want to leave the page?";
 	} else {
 		return;
 	}
