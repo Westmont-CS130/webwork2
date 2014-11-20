@@ -231,7 +231,7 @@ sub entry_widget {
 	my $ce = $self->{Module}->{r}->{ce};
 	my $permHash = {};
 	my %userRoles = %{$ce->{userRoles}};
-	$userRoles{nobody} = 99999999; # insure that nobody comes at the end #FIXME? this is set in defaults.config
+	$userRoles{nobody} = 99999999; # ensure that nobody comes at the end #FIXME? this is set in defaults.config
 	my %reverseUserRoles = reverse %userRoles;
 
 	# the value of a permission can be undefined (for nobody),
@@ -244,6 +244,53 @@ sub entry_widget {
 	return CGI::popup_menu(-name=>$name, -values => \@values,
 		-default=>$default);
 }
+
+
+#####
+package configPermissionWithoutNobody;
+#use parent 'configPermission';
+@configPermissionWithoutNobody::ISA = qw(configobject);
+
+sub display_value {
+	my ($self, $val) = @_;
+	return 'admin' if not defined($val);
+	my %userRoles = %{$self->{Module}->{r}->{ce}->{userRoles}};
+	delete $userRoles{nobody};
+	my %reverseUserRoles = reverse %userRoles;
+	return $reverseUserRoles{$val} if defined($reverseUserRoles{$val});
+	return $val;
+}
+
+sub save_string {
+	my ($self, $oldval, $newvalsource) = @_;
+	my $varname = $self->{var};
+	my $newval = $self->convert_newval_source($newvalsource);
+	my $displayoldval = $self->comparison_value($oldval);
+	return '' if($displayoldval eq $newval);
+	my $str = '$'. $varname . " = '$newval';\n";
+	$str = '$'. $varname . " = undef;\n" if $newval eq 'admin';
+	return($str);
+}
+
+sub entry_widget {
+	my ($self, $name, $default) = @_;
+	my $ce = $self->{Module}->{r}->{ce};
+	my $permHash = {};
+	my %userRoles = %{$ce->{userRoles}};
+	delete $userRoles{nobody};
+	$userRoles{admin} = 20; 
+	my %reverseUserRoles = reverse %userRoles;
+
+	if(not defined($default)) {
+		$default = 'admin';
+	}
+
+	my @values = sort { $userRoles{$a} <=> $userRoles{$b} } keys %userRoles;
+	return CGI::popup_menu(-name=>$name, -values => \@values,
+		-default=>$default);
+}
+
+####
 
 ########################### configlist
 package configlist;

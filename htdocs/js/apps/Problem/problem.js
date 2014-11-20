@@ -1,13 +1,14 @@
 window.submitted = false;
 
 $(function() {    
-$(window).load(function() { $('#achievementModal').modal('show');
-			    setTimeout(function(){$('#achievementModal').modal('hide');},5000);
-			  });
+	$(window).load(function() { 
+		$('#achievementModal').modal('show');
+		setTimeout(function(){$('#achievementModal').modal('hide');},5000);
+	});
 
-$("#submitAnswers_id").click(function(){
-	window.submitted = true;
-});
+	$("#submitAnswers_id").click(function(){
+		window.submitted = true;
+	});
 
 })
 
