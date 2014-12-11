@@ -9,6 +9,12 @@ $(function() {
 	$("#submitAnswers_id").click(function(){
 		window.submitted = true;
 	});
+	$("#checkAnswers_id").click(function(){
+		window.submitted = true;
+	});
+	$("#previewAnswers_id").click(function(){
+		window.submitted = true;
+	});
 
 })
 
